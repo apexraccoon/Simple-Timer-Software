@@ -33,4 +33,5 @@ private:
     QTimer *countdownTimer;
     int initial_hour,initial_minute, initial_second;
 };
+
 #endif // TIMER_H

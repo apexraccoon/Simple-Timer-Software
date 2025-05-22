@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
         }
     }
     Timer w;
+    w.setFixedSize(1050,600);
     w.show();
     return a.exec();
 }
