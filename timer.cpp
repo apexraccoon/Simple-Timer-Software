@@ -1,12 +1,17 @@
 #include "timer.h"
 #include "ui_timer.h"
 #include <QTimer>
+#include <vector>
+#include <list>
 using namespace std;
 //creating window
 Timer::Timer(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::Timer)
 {
+    QIcon icon("C:\\Users\\omare\\OneDrive\\Desktop\\Timer project\\Timer_Project\\old windows clock icon.ico");
+    setWindowIcon(icon);
+
     ui->setupUi(this);
     QPixmap bkgnd("C:\\Users\\omare\\OneDrive\\Desktop\\Timer project\\Timer_Project\\Lofi girl timer project.png");
     bkgnd = bkgnd.scaled(this->size(), Qt::KeepAspectRatioByExpanding); // fixing aspect ratio
@@ -20,6 +25,13 @@ Timer::Timer(QWidget *parent)
     ui->Hour_error_message->setVisible(false);
     ui->Minute_error_message->setVisible(false);
     ui->Second_error_message->setVisible(false);
+    //hide messages of settings
+    ui->Background_Line_Edit->setVisible(false);
+    ui->Background_change_button->setVisible(false);
+    ui->AppLogo_Line_Edit->setVisible(false);
+    ui->AppLogo_change_button->setVisible(false);
+    ui->Settings_label->setVisible(false);
+    ui->Return_button_to_timer->setVisible(false);
     connect(countdownTimer, &QTimer::timeout, this, &Timer::update_time);
 }
 
@@ -72,6 +84,7 @@ void Timer::on_pushButton_clicked()
         ui->Timer_bar->setVisible(true);
         countdownTimer->start(1000);
     }
+
 }
 //countdown
 void Timer::update_time()
@@ -99,5 +112,84 @@ void Timer::update_time()
 void Timer::on_progressBar_valueChanged(int value)
 {
     ui->Timer_bar->setValue(value);
+}
+
+
+void Timer::on_Background_change_button_clicked()
+{
+    //remove " at start and end of file path
+    QString background_new = ui->Background_Line_Edit->text();
+    background_new.removeLast();
+    background_new.removeFirst();
+    QPixmap bkgnd(background_new);
+    //
+    bkgnd = bkgnd.scaled(this->size(), Qt::KeepAspectRatioByExpanding); // fixing aspect ratio
+    QPalette palette;
+    palette.setBrush(QPalette::Window, bkgnd);
+    this->setPalette(palette);
+}
+
+
+void Timer::on_AppLogo_change_button_clicked()
+{
+    //remove " at start and end of file path
+    QString AppLogo_new = ui->AppLogo_Line_Edit->text();
+    AppLogo_new.removeLast();
+    AppLogo_new.removeFirst();
+    //
+    QIcon icon(AppLogo_new);
+    setWindowIcon(icon);
+}
+
+
+void Timer::on_Settings_button_clicked()
+{
+    //Show settings and hide the timer options
+    ui->Background_Line_Edit->setVisible(true);
+    ui->Background_change_button->setVisible(true);
+    ui->AppLogo_Line_Edit->setVisible(true);
+    ui->AppLogo_change_button->setVisible(true);
+    ui->Settings_label->setVisible(true);
+    ui->Return_button_to_timer->setVisible(true);
+    ui->Timer_bar->setVisible(false);
+    ui->Hour_Label->setVisible(false);
+    ui->Minute_Label->setVisible(false);
+    ui->Second_Label->setVisible(false);
+    ui->pushButton->setVisible(false);
+    ui->Hour_Line_Edit->setVisible(false);
+    ui->Minute_Line_Edit->setVisible(false);
+    ui->Seconds_Line_Edit->setVisible(false);
+    ui->Settings_button->setVisible(false);
+    ui->label_2->setVisible(false);
+    ui->label_3->setVisible(false);
+    ui->Hour_error_message->setVisible(false);
+    ui->Minute_error_message->setVisible(false);
+    ui->Second_error_message->setVisible(false);
+}
+
+
+
+void Timer::on_Return_button_to_timer_clicked()
+{
+    //Show timer and settings the timer options
+    ui->Background_Line_Edit->setVisible(false);
+    ui->Background_change_button->setVisible(false);
+    ui->AppLogo_Line_Edit->setVisible(false);
+    ui->AppLogo_change_button->setVisible(false);
+    ui->Settings_label->setVisible(false);
+    ui->statusbar->setVisible(true);
+    ui->Hour_Label->setVisible(true);
+    ui->Minute_Label->setVisible(true);
+    ui->Second_Label->setVisible(true);
+    ui->pushButton->setVisible(true);
+    ui->Hour_Line_Edit->setVisible(true);
+    ui->Minute_Line_Edit->setVisible(true);
+    ui->Seconds_Line_Edit->setVisible(true);
+    ui->Settings_button->setVisible(true);
+    ui->label_2->setVisible(true);
+    ui->label_3->setVisible(true);
+    ui->Hour_error_message->setVisible(true);
+    ui->Minute_error_message->setVisible(true);
+    ui->Second_error_message->setVisible(true);
 }
 

@@ -28,6 +28,16 @@ private slots:
 
     void on_progressBar_valueChanged(int value);
 
+    void on_Background_change_button_clicked();
+
+    void on_AppLogo_change_button_clicked();
+
+    void on_Settings_button_clicked();
+
+    void on_Start_button_clicked();
+
+    void on_Return_button_to_timer_clicked();
+
 private:
     Ui::Timer *ui;
     QTimer *countdownTimer;

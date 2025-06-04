@@ -11,7 +11,6 @@ CONFIG += c++17
 SOURCES += \
     main.cpp \
     timer.cpp
-
 HEADERS += \
     timer.h
 
