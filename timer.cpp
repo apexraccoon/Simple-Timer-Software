@@ -1,8 +1,6 @@
 #include "timer.h"
 #include "ui_timer.h"
 #include <QTimer>
-#include <vector>
-#include <list>
 using namespace std;
 //creating window
 Timer::Timer(QWidget *parent)
@@ -39,6 +37,9 @@ Timer::~Timer()
 {
     delete ui;
 }
+bool started_timer = false; // used to check if timer has started and used to make settings ui after exiting work properly
+bool restarted = false; //used to rese and used to make settings ui after exiting work properly
+
 void Timer::on_pushButton_clicked()
 {
     // try and catch to check if hour and minute and seconds are corrct and I know that using an if statement is better!
@@ -77,12 +78,18 @@ void Timer::on_pushButton_clicked()
         ui->Minute_Line_Edit->setVisible(false);
         ui->Seconds_Line_Edit->setVisible(false);
         ui->pushButton->setVisible(false);
-
+        //display timer labels aka hours,minutes,seconds
+        ui->Hour_Label->setVisible(true);
+        ui->Minute_Label->setVisible(true);
+        ui->Second_Label->setVisible(true);
         initial_hour = ui->Hour_Line_Edit->text().toInt();
         initial_minute = ui->Minute_Line_Edit->text().toInt();
         initial_second = ui->Seconds_Line_Edit->text().toInt();
         ui->Timer_bar->setVisible(true);
         countdownTimer->start(1000);
+        ui->pushButton->setVisible(false);
+        started_timer = true;
+        restarted = false;
     }
 
 }
@@ -165,12 +172,30 @@ void Timer::on_Settings_button_clicked()
     ui->Hour_error_message->setVisible(false);
     ui->Minute_error_message->setVisible(false);
     ui->Second_error_message->setVisible(false);
+    ui->Restart_button->setVisible(false);
 }
 
 
 
 void Timer::on_Return_button_to_timer_clicked()
 {
+    //prevent overlapping
+    if(started_timer){
+        ui->Hour_Line_Edit->setVisible(false);
+        ui->Minute_Line_Edit->setVisible(false);
+        ui->Seconds_Line_Edit->setVisible(false);
+    }
+    else{
+        ui->Hour_Line_Edit->setVisible(true);
+        ui->Minute_Line_Edit->setVisible(true);
+        ui->Seconds_Line_Edit->setVisible(true);
+        ui->pushButton->setVisible(true);
+    }
+    if(!restarted){
+        ui->Hour_Label->setVisible(true);
+        ui->Minute_Label->setVisible(true);
+        ui->Second_Label->setVisible(true);
+    }
     //Show timer and settings the timer options
     ui->Background_Line_Edit->setVisible(false);
     ui->Background_change_button->setVisible(false);
@@ -178,18 +203,28 @@ void Timer::on_Return_button_to_timer_clicked()
     ui->AppLogo_change_button->setVisible(false);
     ui->Settings_label->setVisible(false);
     ui->statusbar->setVisible(true);
-    ui->Hour_Label->setVisible(true);
-    ui->Minute_Label->setVisible(true);
-    ui->Second_Label->setVisible(true);
-    ui->pushButton->setVisible(true);
-    ui->Hour_Line_Edit->setVisible(true);
-    ui->Minute_Line_Edit->setVisible(true);
-    ui->Seconds_Line_Edit->setVisible(true);
+
     ui->Settings_button->setVisible(true);
     ui->label_2->setVisible(true);
     ui->label_3->setVisible(true);
-    ui->Hour_error_message->setVisible(true);
-    ui->Minute_error_message->setVisible(true);
-    ui->Second_error_message->setVisible(true);
+    ui->Restart_button->setVisible(true);
+}
+
+
+void Timer::on_Restart_button_clicked()
+{
+    ui->Hour_Line_Edit->setText("");
+    ui->Minute_Line_Edit->setText("");
+    ui->Seconds_Line_Edit->setText("");
+    ui->Hour_Line_Edit->setVisible(true);
+    ui->Minute_Line_Edit->setVisible(true);
+    ui->Seconds_Line_Edit->setVisible(true);
+    ui->Timer_bar->setVisible(false);
+    ui->Hour_Label->setVisible(false);
+    ui->Minute_Label->setVisible(false);
+    ui->Second_Label->setVisible(false);
+    ui->pushButton->setVisible(true);
+    started_timer = false;
+    restarted = true;
 }
 

@@ -377,6 +377,26 @@ font: 20pt &quot;Segoe UI&quot;;</string>
      <string>Return</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="Restart_button">
+    <property name="geometry">
+     <rect>
+      <x>420</x>
+      <y>390</y>
+      <width>80</width>
+      <height>24</height>
+     </rect>
+    </property>
+    <property name="autoFillBackground">
+     <bool>false</bool>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background: transparent;
+</string>
+    </property>
+    <property name="text">
+     <string>Restart</string>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">

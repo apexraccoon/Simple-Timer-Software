@@ -38,6 +38,10 @@ private slots:
 
     void on_Return_button_to_timer_clicked();
 
+    void on_Restart_button_clicked();
+
+    void on_nothing_button_clicked();
+
 private:
     Ui::Timer *ui;
     QTimer *countdownTimer;
