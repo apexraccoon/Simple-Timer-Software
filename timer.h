@@ -20,10 +20,6 @@ public:
 private slots:
     void on_pushButton_clicked();
 
-    void on_pushButton_2_clicked();
-
-    void on_pushButton_3_clicked();
-
     void update_time();
 
     void on_progressBar_valueChanged(int value);
@@ -34,13 +30,22 @@ private slots:
 
     void on_Settings_button_clicked();
 
-    void on_Start_button_clicked();
-
     void on_Return_button_to_timer_clicked();
 
     void on_Restart_button_clicked();
 
-    void on_nothing_button_clicked();
+    void on_Change_Alarm_button_clicked();
+
+    void on_To_Do_List_button_clicked();
+
+    void on_Add_To_do_task_button_clicked();
+
+    void checklist();
+    void on_Delete_all_tasks_done_clicked();
+
+    void on_Delete_To_do_task_button_clicked();
+
+    void on_Return_to_do_to_main_button_clicked();
 
 private:
     Ui::Timer *ui;
