@@ -46,6 +46,10 @@ Timer::Timer(QWidget *parent)
 QList <QCheckBox*> tasks;
 //alarm sound
 QString alarm_sound;
+
+//Sound that will be played at end
+QSoundEffect *sound;
+
 Timer::~Timer()
 {
     delete ui;
@@ -57,6 +61,7 @@ void Timer::on_pushButton_clicked()
 {
     // try and catch to check if hour and minute and seconds are corrct and I know that using an if statement is better!
     try{
+
         //hide error messages before checking
         ui->Hour_error_message->setVisible(false);
         ui->Minute_error_message->setVisible(false);
@@ -113,30 +118,41 @@ void Timer::on_pushButton_clicked()
 //countdown
 void Timer::update_time()
 {
-    //check if second is equal to zero
-    if(ui->Second_Label->text().toInt() == 0){
-        if(ui->Minute_Label->text().toInt() == 0){
-            ui->Hour_Label->setText(QString::number((ui->Hour_Label->text().toInt()) - 1)); // reduce hour by 1 in case Second and Minute are zero
-            ui->Minute_Label->setText(QString::number((ui->Minute_Label->text().toInt()) + 59));
-            ui->Second_Label->setText(QString::number((ui->Second_Label->text().toInt()) +59));
+
+    //reduce time only if time isn't paused
+    if(started_timer){
+        //check if second is equal to zero
+        if(ui->Second_Label->text().toInt() == 0){
+            if(ui->Minute_Label->text().toInt() == 0){
+                ui->Hour_Label->setText(QString::number((ui->Hour_Label->text().toInt()) - 1)); // reduce hour by 1 in case Second and Minute are zero
+                ui->Minute_Label->setText(QString::number((ui->Minute_Label->text().toInt()) + 59));
+                ui->Second_Label->setText(QString::number((ui->Second_Label->text().toInt()) +59));
+            }
+            else{
+                ui->Minute_Label->setText(QString::number((ui->Minute_Label->text().toInt()) - 1)); // reduce Minute by 1 in case Second is zero
+                ui->Second_Label->setText(QString::number((ui->Second_Label->text().toInt()) +59));
+            }
         }
         else{
-            ui->Minute_Label->setText(QString::number((ui->Minute_Label->text().toInt()) - 1)); // reduce Minute by 1 in case Second is zero
-            ui->Second_Label->setText(QString::number((ui->Second_Label->text().toInt()) +59));
+            ui->Second_Label->setText(QString::number((ui->Second_Label->text().toInt()) - 1)); // reduce second by 1
         }
-    }
-    else{
-        ui->Second_Label->setText(QString::number((ui->Second_Label->text().toInt()) - 1)); // reduce second by 1
-    }
-    //progress bar(percentage of time remaining)
-    on_progressBar_valueChanged(((ui->Hour_Label->text().toInt()*3600 + ui->Minute_Label->text().toInt() * 60 + ui->Second_Label->text().toInt())*100)/(initial_hour * 3600 + initial_minute * 60 + initial_second)); // testing progress bar
-    //timer sound
-    if(ui->Hour_Label->text().toInt() == 0 && ui->Minute_Label->text().toInt() == 0 && ui->Second_Label->text().toInt() == 0){
-        QSoundEffect *sound = new QSoundEffect(this);
-        sound->setSource(QUrl::fromLocalFile(alarm_sound));
-        sound->setVolume(1);
-        sound->play();
-        on_Restart_button_clicked();
+        //progress bar(percentage of time remaining)
+        on_progressBar_valueChanged(((ui->Hour_Label->text().toInt()*3600 + ui->Minute_Label->text().toInt() * 60 + ui->Second_Label->text().toInt())*100)/(initial_hour * 3600 + initial_minute * 60 + initial_second)); // testing progress bar
+        //timer sound
+        if(ui->Hour_Label->text().toInt() == 0 && ui->Minute_Label->text().toInt() == 0 && ui->Second_Label->text().toInt() == 0){
+
+            //hide progress Bar and time
+            ui->Timer_bar->setVisible(false);
+            ui->Hour_Label->setVisible(false);
+            ui->Minute_Label->setVisible(false);
+            ui->Second_Label->setVisible(false);
+
+            sound = new QSoundEffect(this);
+            sound->setSource(QUrl::fromLocalFile(alarm_sound));
+            sound->setVolume(1);
+            sound->play();
+
+        }
     }
 }
 
@@ -286,6 +302,11 @@ void Timer::on_Restart_button_clicked()
     ui->pushButton->setVisible(true);
     started_timer = false;
     restarted = true;
+
+    //pause song if being played
+    if(sound != NULL){
+        sound->stop();
+    }
 }
 
 void Timer::on_Change_Alarm_button_clicked()
